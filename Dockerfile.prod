@@ -8,4 +8,3 @@ EXPOSE 3000
 
 CMD ["node","index.js"]
 
-# docker build -t nervado/hello-express . -f Dockerfile.prod
