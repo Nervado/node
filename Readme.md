@@ -1,4 +1,4 @@
-### This is a simple project to show row to configure nginx to proxy requests to a node app
+### This is a simple project to show how to configure nginx to proxy requests to a node app
 
 The project uses three docker images:
 
