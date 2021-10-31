@@ -9,6 +9,7 @@ services:
     entrypoint: dockerize -wait tcp://db:3306 -timeout 30s node index.js
     networks:
       - nodenet
+      - sqlnet
     volumes:
       - ./app:/usr/src/app
     tty: true
@@ -26,7 +27,7 @@ services:
       - MYSQL_DATABASE=nodedb
       - MYSQL_ROOT_PASSWORD=root
     networks:
-      - nodenet
+      - sqlnet
   nginx:
     build:
       context: ./nginx
@@ -42,4 +43,6 @@ services:
 
 networks:
   nodenet:
+    driver: bridge
+  sqlnet:
     driver: bridge
