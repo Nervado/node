@@ -21,7 +21,7 @@ connection.query(sql)
 
 let greeting = ''
 
-connection.query("SELECT id,name FROM people ORDER BY id DESC LIMIT 1", (error, results, fields) => {
+connection.query("SELECT id,name FROM people ORDER BY id DESC LIMIT 100", (error, results, fields) => {
   Object.keys(results).forEach(function (key) {
     greeting = `<p>Hello ${results[key].name}!</p>`
   });

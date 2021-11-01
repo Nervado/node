@@ -10,8 +10,6 @@ services:
     networks:
       - nodenet
       - sqlnet
-    volumes:
-      - ./app:/usr/src/app
     tty: true
     depends_on:
       - db
