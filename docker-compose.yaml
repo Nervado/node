@@ -18,7 +18,7 @@ services:
     command: --innodb-use-native-aio=0 --init-file /docker-entrypoint-initdb.d/setup.sql
     container_name: db
     tty: true
-    volumes:
+    volumes: #--init-file /docker-entrypoint-initdb.d/setup.sql
       - ./mysql/scripts/setup.sql:/docker-entrypoint-initdb.d/setup.sql
       - ./mysql/data:/var/lib/mysql
     environment:

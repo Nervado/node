@@ -1,4 +1,5 @@
 const express = require('express')
+const mysql = require('mysql')
 
 const app = express()
 
@@ -11,23 +12,52 @@ const config = {
   database: 'nodedb'
 }
 
-const mysql = require('mysql')
+const connection = async (params) => new Promise(
+  (resolve, reject) => {
+    const connection = mysql.createConnection(params);
+    connection.connect(error => {
+      if (error) {
+        reject(error);
+        return;
+      }
+      resolve(connection);
+    })
+  });
 
-const connection = mysql.createConnection(config)
+const query = async (conn, q, params) => new Promise(
+  (resolve, reject) => {
+    const handler = (error, result) => {
+      if (error) {
+        reject(error);
+        return;
+      }
+      resolve(result);
+    }
+    conn.query(q, params, handler);
+  });
 
-const sql = `INSERT INTO people(name) values('Evandro')`
 
-connection.query(sql)
+// insert data in database 
+const bootDatabase = async (config) => {
+  const conn = await connection(config).catch(e => { })
+  await query(conn, "INSERT INTO people(name) values('Paula')").catch(console.log);
+  await query(conn, "INSERT INTO people(name) values('Fernanda')").catch(console.log);
+  await query(conn, "INSERT INTO people(name) values('João')").catch(console.log);
+}
+bootDatabase(config)
 
-app.get('/', (req, res) => {
+// routes
+app.get('/', async (req, res) => {
+
+  const conn = await connection(config).catch(e => { })
+  const results = await query(conn, "SELECT id,name FROM people ORDER BY id DESC").catch(console.log);
 
   let greeting = ''
 
-  connection.query("SELECT id,name FROM people ORDER BY id DESC LIMIT 100", (error, results, fields) => {
-    Object.keys(results).forEach(function (key) {
-      greeting = greeting + `<p>Hello ${results[key].name}!</p>`
-    });
-  })
+  Object.keys(results).forEach(function (key) {
+    greeting = greeting + `<p>Hello ${results[key].name}!</p>`
+  });
+
   res.send(`<h1>Full Cycle</h1>` + greeting)
 });
 
