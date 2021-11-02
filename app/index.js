@@ -31,6 +31,7 @@ const query = async (conn, q, params) => new Promise(
         reject(error);
         return;
       }
+      conn.end()
       resolve(result);
     }
     conn.query(q, params, handler);
@@ -41,6 +42,7 @@ const query = async (conn, q, params) => new Promise(
 const bootDatabase = async (config) => {
   const conn = await connection(config).catch(e => { })
   await query(conn, "INSERT INTO people(name) values('Paula')").catch(console.log);
+  await query(conn, "INSERT INTO people(name) values('Thais')").catch(console.log);
   await query(conn, "INSERT INTO people(name) values('Fernanda')").catch(console.log);
   await query(conn, "INSERT INTO people(name) values('João')").catch(console.log);
 }
@@ -52,13 +54,15 @@ app.get('/', async (req, res) => {
   const conn = await connection(config).catch(e => { })
   const results = await query(conn, "SELECT id,name FROM people ORDER BY id DESC").catch(console.log);
 
-  let greeting = ''
+  let greeting = `<ul>`
 
   Object.keys(results).forEach(function (key) {
-    greeting = greeting + `<p>Hello ${results[key].name}!</p>`
+    greeting = greeting + `<li><p>${results[key].name}</p></li>`
   });
 
-  res.send(`<h1>Full Cycle</h1>` + greeting)
+  greeting = greeting + `</ul>`
+
+  res.send(`<h1>Full Cycle Rocks!</h1>` + greeting)
 });
 
 
