@@ -24,14 +24,14 @@ const connection = async (params) => new Promise(
     })
   });
 
-const query = async (conn, q, params) => new Promise(
+const query = async (conn, q, params, close = false) => new Promise(
   (resolve, reject) => {
     const handler = (error, result) => {
       if (error) {
         reject(error);
         return;
       }
-      conn.end()
+      if (close) conn.end()
       resolve(result);
     }
     conn.query(q, params, handler);
@@ -52,7 +52,7 @@ bootDatabase(config)
 app.get('/', async (req, res) => {
 
   const conn = await connection(config).catch(e => { })
-  const results = await query(conn, "SELECT id,name FROM people ORDER BY id DESC").catch(console.log);
+  const results = await query(conn, "SELECT id,name FROM people ORDER BY id DESC", true).catch(console.log);
 
   let greeting = `<ul>`
 
