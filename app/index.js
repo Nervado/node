@@ -1,5 +1,6 @@
 const express = require('express')
 const mysql = require('mysql')
+const faker = require('faker')
 
 const app = express()
 
@@ -38,20 +39,28 @@ const query = async (conn, q, params, close = false) => new Promise(
   });
 
 
-// insert data in database 
+// insert some names in database 
 const bootDatabase = async (config) => {
   const conn = await connection(config).catch(e => { })
-  await query(conn, "INSERT INTO people(name) values('Paula')").catch(console.log);
-  await query(conn, "INSERT INTO people(name) values('Thais')").catch(console.log);
-  await query(conn, "INSERT INTO people(name) values('Fernanda')").catch(console.log);
-  await query(conn, "INSERT INTO people(name) values('João')").catch(console.log);
+
+  Array.from(Array(5).keys()).forEach(async () => {
+    const randomName = faker.name.findName();
+    await query(conn, `INSERT INTO people(name) values('${randomName}')`).catch(console.log);
+  })
 }
+
 bootDatabase(config)
 
 // routes
 app.get('/', async (req, res) => {
 
+  // create connection
   const conn = await connection(config).catch(e => { })
+  // generate new name
+  const randomName = faker.name.findName();
+  // insert new name
+  await query(conn, `INSERT INTO people(name) values('${randomName}')`).catch(console.log);
+  // query updated list of names
   const results = await query(conn, "SELECT id,name FROM people ORDER BY id DESC", true).catch(console.log);
 
   let greeting = `<ul>`
