@@ -14,12 +14,13 @@ services:
     depends_on:
       - db
   db:
+    build:
+      context: ./mysql
     image: mysql:5.7
-    command: --innodb-use-native-aio=0 --init-file /docker-entrypoint-initdb.d/setup.sql
+    command: --innodb-use-native-aio=0
     container_name: db
     tty: true
     volumes: #--init-file /docker-entrypoint-initdb.d/setup.sql
-      - ./mysql/scripts/setup.sql:/docker-entrypoint-initdb.d/setup.sql
       - ./mysql/data:/var/lib/mysql
     environment:
       - MYSQL_DATABASE=nodedb

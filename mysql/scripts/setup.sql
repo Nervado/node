@@ -1,3 +1,5 @@
-USE nodedb;
+CREATE DATABASE IF NOT EXISTS `nodedb`;
+USE `nodedb`;
 
-CREATE TABLE people (id INT NOT NULL auto_increment, NAME VARCHAR(255), PRIMARY KEY(id));
+DROP TABLE IF EXISTS `people`;
+CREATE TABLE `people` (id INT NOT NULL auto_increment, NAME VARCHAR(255), PRIMARY KEY(id));
