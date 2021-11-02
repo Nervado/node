@@ -19,17 +19,15 @@ const sql = `INSERT INTO people(name) values('Evandro')`
 
 connection.query(sql)
 
-let greeting = ''
-
-connection.query("SELECT id,name FROM people ORDER BY id DESC LIMIT 100", (error, results, fields) => {
-  Object.keys(results).forEach(function (key) {
-    greeting = `<p>Hello ${results[key].name}!</p>`
-  });
-})
-
-connection.end()
-
 app.get('/', (req, res) => {
+
+  let greeting = ''
+
+  connection.query("SELECT id,name FROM people ORDER BY id DESC LIMIT 100", (error, results, fields) => {
+    Object.keys(results).forEach(function (key) {
+      greeting = greeting + `<p>Hello ${results[key].name}!</p>`
+    });
+  })
   res.send(`<h1>Full Cycle</h1>` + greeting)
 });
 

@@ -24,6 +24,7 @@ services:
     environment:
       - MYSQL_DATABASE=nodedb
       - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_ROOT_HOST=%
     networks:
       - sqlnet
   nginx:
