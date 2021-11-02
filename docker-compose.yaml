@@ -5,6 +5,7 @@ services:
     build:
       context: ./app
       dockerfile: Dockerfile
+    image: nervado/app:prod
     container_name: app
     entrypoint: dockerize -wait tcp://db:3306 -timeout 30s node index.js
     networks:
@@ -16,16 +17,15 @@ services:
   db:
     build:
       context: ./mysql
-    image: mysql:5.7
+    image: nervado/mysql:prod
     command: --innodb-use-native-aio=0
     container_name: db
     tty: true
-    volumes: #--init-file /docker-entrypoint-initdb.d/setup.sql
+    volumes:
       - ./mysql/data:/var/lib/mysql
     environment:
       - MYSQL_DATABASE=nodedb
       - MYSQL_ROOT_PASSWORD=root
-      - MYSQL_ROOT_HOST=%
     networks:
       - sqlnet
   nginx:
