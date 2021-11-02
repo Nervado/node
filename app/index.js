@@ -61,7 +61,7 @@ app.get('/', async (req, res) => {
   // insert new name
   await query(conn, `INSERT INTO people(name) values('${randomName}')`).catch(console.log);
   // query updated list of names
-  const results = await query(conn, "SELECT id,name FROM people ORDER BY id DESC", true).catch(console.log);
+  const results = await query(conn, "SELECT id,name FROM people ORDER BY id DESC LIMIT 100", true).catch(console.log);
 
   let greeting = `<ul>`
 
